@@ -1,6 +1,6 @@
 
 public class Vessel {
-	private int capacity, currentVolume = 5;
+	private int capacity, currentVolume = 10;
 	private String contentName;
 	
 	public Vessel(int capacity, String name){
