@@ -14,56 +14,6 @@ public class CoffeeMaker {
 		init();
 	}
 	
-	public static void main(String[] args){
-		CoffeeMaker coffeeMaker = new CoffeeMaker();
-		Scanner in = new Scanner(System.in);
-		
-		int type;
-		
-		System.out.print("Welcome. \nWould you like to refill? '1'-YES, '2'-NO ");
-		if (in.nextInt() == 1) {
-			coffeeMaker.load(false);
-		}
-
-		while(condition){
-			condition = false;
-			
-			try{
-				System.out.print("\nNumber of cups:  - 1 or 2 ");
-				coffeeMaker.qSel = in.nextInt();
-				if(coffeeMaker.qSel < 2 && coffeeMaker.qSel > 0 ){
-					System.out.print("Coffee type? \n'1' Espresso\n'2' Cappucino\n'3' Mocha\n'4' Latte ");
-					type = in.nextInt();
-					if (type < 5 && type > 0){
-						Coffee cfSelected = coffeeMaker.coffeeTypes[type - 1];
-						coffeeMaker.selectedCoffee = cfSelected;
-						System.out.println("You selected "+cfSelected.getName());
-						//System.out.println("Is enough: "+ coffeeMaker.isEnough(q, coffeeTypes[type - 1]));
-						coffeeMaker.makeIt(coffeeMaker.qSel, cfSelected);
-					}
-				}else{
-					System.out.println("Please input a quantity greater than 0 and and less than 3");
-				}
-			}catch(NumberFormatException e){
-				System.out.println("Wrong number input entered");
-			}
-		
-
-			System.out.println("Do you want to make another Coffee? \'1' - Yes or '2' - No");
-			int input = in.nextInt();
-			if (input == 2) {
-				break;
-			}else if(input == 1){
-				condition = true;
-				continue;
-			}else{
-				System.out.println("Wrong input entered");
-			}
-		}
-		
-	}
-	
-
 	public boolean isEnough(int quantity, Coffee ctype){
 		/*int usedMilk = milkVessel.getUsed();
 		int usedCoffee = coffeeVessel.getUsed();
@@ -178,5 +128,55 @@ public class CoffeeMaker {
 		}
 		boolean plural = q > 1;
 		System.out.println("Here "+(plural ? "are" : "is")+" your " + q + " cup"+(plural ? "s" : "")+" of " + cfSel.getName());
+	}
+
+		//main method
+		public static void main(String[] args){
+		CoffeeMaker coffeeMaker = new CoffeeMaker();
+		Scanner in = new Scanner(System.in);
+		
+		int type;
+		
+		System.out.print("Welcome. \nWould you like to refill? '1'-YES, '2'-NO ");
+		if (in.nextInt() == 1) {
+			coffeeMaker.load(false);
+		}
+
+		while(condition){
+			condition = false;
+			
+			try{
+				System.out.print("\nNumber of cups:  - 1 or 2 ");
+				coffeeMaker.qSel = in.nextInt();
+				if(coffeeMaker.qSel < 2 && coffeeMaker.qSel > 0 ){
+					System.out.print("Coffee type? \n'1' Espresso\n'2' Cappucino\n'3' Mocha\n'4' Latte ");
+					type = in.nextInt();
+					if (type < 5 && type > 0){
+						Coffee cfSelected = coffeeMaker.coffeeTypes[type - 1];
+						coffeeMaker.selectedCoffee = cfSelected;
+						System.out.println("You selected "+cfSelected.getName());
+						//System.out.println("Is enough: "+ coffeeMaker.isEnough(q, coffeeTypes[type - 1]));
+						coffeeMaker.makeIt(coffeeMaker.qSel, cfSelected);
+					}
+				}else{
+					System.out.println("Please input a quantity greater than 0 and and less than 3");
+				}
+			}catch(NumberFormatException e){
+				System.out.println("Wrong number input entered");
+			}
+		
+
+			System.out.println("Do you want to make another Coffee? \'1' - Yes or '2' - No");
+			int input = in.nextInt();
+			if (input == 2) {
+				break;
+			}else if(input == 1){
+				condition = true;
+				continue;
+			}else{
+				System.out.println("Wrong input entered");
+			}
+		}
+		
 	}
 }
