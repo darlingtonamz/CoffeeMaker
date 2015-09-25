@@ -2,7 +2,15 @@
 public class Vessel {
 
 	private int currentVolumeMilk, currentVolumeCoffee, currentVolumeChocolate, currentVolumeWater ;
+	private int maxVolume;
 
+	public int getMaxVolume() {
+		return maxVolume;
+	}
+
+	public void setMaxVolume(int maxVolume) {
+		this.maxVolume = maxVolume;
+	}
 
 	public Vessel(int volume){
 		// constructor
