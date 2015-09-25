@@ -1,31 +1,48 @@
 
 public class Vessel {
-	private int capacity, currentVolume = 10;
-	private String contentName;
+
+	private int currentVolumeMilk, currentVolumeCoffee, currentVolumeChocolate, currentVolumeWater ;
+
+
+	public Vessel(int volume){
+		// constructor
+		currentVolumeMilk = volume;
+		currentVolumeCoffee = volume;
+		currentVolumeChocolate = volume;
+		currentVolumeWater = volume;
+	}
 	
-	public Vessel(int capacity, String name){
-		this.capacity = capacity;
-		contentName = name;
+
+	public int getMilkCurrentVolume() {
+		return currentVolumeMilk;
 	}
-	public int getUsed(){
-		return (capacity - currentVolume);
+
+	public int getCoffeeCurrentVolume() {
+		return currentVolumeCoffee;
 	}
-	public int getCapacity() {
-		return capacity;
+
+	public int getChocolateCurrentVolume() {
+		return currentVolumeChocolate;
 	}
-	public int getCurrentVolume() {
-		return currentVolume;
+
+	public int getWaterCurrentVolume() {
+		return currentVolumeWater;
 	}
-	public String getContentName() {
-		return contentName;
+
+	public void setMilkCurrentVolume(int milk) {
+		this.currentVolumeMilk = milk;
 	}
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
+
+	public void setCoffeeCurrentVolume(int coffee) {
+		this.currentVolumeCoffee = coffee;
 	}
-	public void setCurrentVolume(int currentVolume) {
-		this.currentVolume = currentVolume;
+
+	public void setChocolateCurrentVolume(int chocolate) {
+		this.currentVolumeChocolate = chocolate;
 	}
-	public void setContentName(String contentName) {
-		this.contentName = contentName;
+
+	public void setWaterCurrentVolume(int water) {
+		this.currentVolumeWater = water;
 	}
+	
 }

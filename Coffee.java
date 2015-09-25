@@ -1,6 +1,7 @@
 
 public class Coffee {
-	private int milkAmt, coffeeAmt, waterAmt, chocolateAmt;
+
+	private  int milkAmt, coffeeAmt, waterAmt, chocolateAmt;
 	String name;
 	
 	public Coffee(int milk, int coffee, int water, int chocolate, String name){
@@ -11,7 +12,7 @@ public class Coffee {
 		this.name = name;
 	}
 
-	public int getMilkAmt() {
+	public  int getMilkAmt() {
 		return milkAmt;
 	}
 
@@ -19,16 +20,32 @@ public class Coffee {
 		return coffeeAmt;
 	}
 
-	public int getWaterAmt() {
+	public  int getWaterAmt() {
 		return waterAmt;
 	}
 
-	public int getChocolateAmt() {
+	public  int getChocolateAmt() {
 		return chocolateAmt;
 	}
 	
-	public String getName(){
+	public  String getName(){
 		return name;
 	}
+
+	// public  void setMilkAmt(int milk){
+	// 	this.milkAmt = milk;
+	// }
+
+	// public  void setCoffeeAmt(int coffee){
+	// 	this.coffeeAmt = coffee;
+	// }
+
+	// public  void setWaterAmt(int water){
+	// 	this.waterAmt = water;
+	// }
+
+	// public  void setChocolateAmt(int chocolate){
+	// 	this.chocolateAmt = chocolate;
+	// }
 	
 }
