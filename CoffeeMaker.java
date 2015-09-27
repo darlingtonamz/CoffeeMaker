@@ -1,3 +1,11 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -15,10 +23,6 @@ public class CoffeeMaker {
 	}
 	
 	public boolean isEnough(int quantity, Coffee ctype){
-		/*int usedMilk = milkVessel.getUsed();
-		int usedCoffee = coffeeVessel.getUsed();
-		int usedWater = waterVessel.getUsed();
-		int usedChocolate = chocolateVessel.getUsed();*/
 		int rMilk = quantity * ctype.getMilkAmt();
 		int rCoffee = (quantity * ctype.getCoffeeAmt());
 		int rWater = (quantity * ctype.getWaterAmt());
@@ -29,22 +33,22 @@ public class CoffeeMaker {
 		boolean isWater = rWater <= rVessel.getWaterCurrentVolume();
 		boolean isChocolate = rChocolate <= rVessel.getChocolateCurrentVolume();
 		
-		System.out.println("\n\n----------------------Current stock-------------------- \n"+
-		"The machine currently has: "+
-		"Milk: "+rVessel.getMilkCurrentVolume()+", Coffee: "+ rVessel.getCoffeeCurrentVolume()+
-		", Water: "+rVessel.getWaterCurrentVolume()+", Chocolate: "+rVessel.getChocolateCurrentVolume()+
-		"\nPlease add the following for your "+ctype.name+"\n"+
+		getStock();
+		System.out.println("\nPlease add the following for your "+ctype.name+"\n"+
 				"Milk: "+rMilk+", Coffee: "+ rCoffee+", Water: "+rWater+", Chocolate: "+rChocolate+"\n");
 		return (isMilk && isCoffee && isWater && isChocolate);
 	}
 	
+	public void getStock(){
+		System.out.println("\n\n----------------------Current stock-------------------- \n"+
+				"The machine currently has: "+
+				"Milk: "+rVessel.getMilkCurrentVolume()+", Coffee: "+ rVessel.getCoffeeCurrentVolume()+
+				", Water: "+rVessel.getWaterCurrentVolume()+", Chocolate: "+rVessel.getChocolateCurrentVolume());
+	}
+	
 	public void init(){
 		rVessel = new Vessel(0);
-		rVessel.setMaxVolume(10);
-		// milkVessel = new Vessel(10,"milk");
-		// coffeeVessel = new Vessel(10,"coffee");
-		// waterVessel = new Vessel(10,"water");
-		// chocolateVessel = new Vessel(10,"chocolate");		
+		rVessel.setMaxVolume(10);	
 
 		esp = new Coffee(0, 2, 4, 0, "Espresso");
 		cap = new Coffee(2, 1, 4, 0, "Cappucino");
@@ -62,11 +66,8 @@ public class CoffeeMaker {
 		rVessel.setCoffeeCurrentVolume(rVessel.getCoffeeCurrentVolume()  - (q * cType.getCoffeeAmt()));
 		rVessel.setWaterCurrentVolume(rVessel.getWaterCurrentVolume()  - (q  * cType.getWaterAmt()));
 		rVessel.setChocolateCurrentVolume(rVessel.getChocolateCurrentVolume()  - (q * cType.getChocolateAmt()));
-
-		// milkVessel.setCurrentVolume(milkVessel.getCurrentVolume() - (q * cType.getMilkAmt()));
-		// coffeeVessel.setCurrentVolume(coffeeVessel.getCurrentVolume() - (q * cType.getCoffeeAmt()));
-		// waterVessel.setCurrentVolume(waterVessel.getCurrentVolume() - (q * cType.getWaterAmt()));
-		// chocolateVessel.setCurrentVolume(chocolateVessel.getCurrentVolume() - (q * cType.getChocolateAmt()));
+		
+		saveIt();
 	}
 	
 	public void load(boolean coffeeIsSelected){
@@ -99,6 +100,8 @@ public class CoffeeMaker {
 			rVessel.setChocolateCurrentVolume(rVessel.getChocolateCurrentVolume() + qChocolate);
 		}
    		
+   		saveIt();
+   		
    		if(coffeeIsSelected)
    			makeIt(qSel, selectedCoffee);
 
@@ -109,6 +112,7 @@ public class CoffeeMaker {
 			mix(q, cfSelected);
 			brew(q, cfSelected);
 		}else{
+			logIt("Not enough ingredients to make "+cfSelected.getName()+" proceeding to refill");
 			System.out.println("Refill ingredients to make the " + cfSelected.name);
 			load(true);
 		}
@@ -130,18 +134,79 @@ public class CoffeeMaker {
 		System.out.println("Here "+(plural ? "are" : "is")+" your " + q + " cup"+(plural ? "s" : "")+" of " + cfSel.getName());
 	}
 
-		//main method
-		public static void main(String[] args){
+	public void saveIt(){
+		File file = new File("save.txt");
+	      // creates the file
+		try {
+			String saveOut = rVessel.getMilkCurrentVolume()+"\n"+ rVessel.getCoffeeCurrentVolume()+
+					"\n"+rVessel.getWaterCurrentVolume()+"\n"+rVessel.getChocolateCurrentVolume();
+			file.createNewFile();
+			FileWriter writer = new FileWriter(file); 
+			writer.write(saveOut); 
+			writer.flush();
+			writer.close();
+			logIt("Saved data " + saveOut.replace('\n', ','));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logIt("file error when saving coffee-maker state to file");
+		}
+	}
+	
+	public void logIt(String mes){
+		File file = new File("log.txt");
+	      // creates the file
+		try {
+			if(!file.exists()){
+    			file.createNewFile();
+    		}
+			
+			String time = LocalDateTime.now().toString();
+			//file.i.createNewFile();
+			FileWriter writer = new FileWriter(file,true); 
+			writer.write(time + " : " + mes+"\n"); 
+			writer.flush();
+			writer.close();
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
+	public void loadIt(){
+		Scanner fileIn;
+		try {
+			fileIn = new Scanner(new FileReader("save.txt"));
+			ArrayList<Integer> inFile = new ArrayList<Integer>();
+			while(fileIn.hasNextLine()){
+				inFile.add(Integer.parseInt(fileIn.nextLine()));
+			}
+			rVessel.setMilkCurrentVolume(inFile.get(0));
+			rVessel.setCoffeeCurrentVolume(inFile.get(1));
+			rVessel.setWaterCurrentVolume(inFile.get(2));
+			rVessel.setChocolateCurrentVolume(inFile.get(3));
+			
+			logIt("Loading data from file " + inFile.get(0) + ", " + inFile.get(1) + ", "+ inFile.get(2) + ", "+ inFile.get(3));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	//main method
+	public static void main(String[] args){
 		CoffeeMaker coffeeMaker = new CoffeeMaker();
+		coffeeMaker.loadIt();
 		Scanner in = new Scanner(System.in);
 		
 		int type;
-		
+		coffeeMaker.getStock();
 		System.out.print("Welcome. \nWould you like to refill? '1'-YES, '2'-NO ");
 		if (in.nextInt() == 1) {
 			coffeeMaker.load(false);
 		}
-
+	
 		while(condition){
 			condition = false;
 			
@@ -165,10 +230,11 @@ public class CoffeeMaker {
 				System.out.println("Wrong number input entered");
 			}
 		
-
+	
 			System.out.println("Do you want to make another Coffee? \'1' - Yes or '2' - No");
 			int input = in.nextInt();
 			if (input == 2) {
+				System.out.println("Thank you... \nEnjoy your coffee");
 				break;
 			}else if(input == 1){
 				condition = true;
