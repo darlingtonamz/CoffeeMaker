@@ -144,7 +144,8 @@ public class CoffeeMaker {
 			i++;
 		}
 		boolean plural = q > 1;
-		System.out.println("Here "+(plural ? "are" : "is")+" your " + q + " cup"+(plural ? "s" : "")+" of " + cfSel.getName());
+		System.out.println("Here "+(plural ? "are" : "is")+" your " + q + " cup"+(plural ? "s" : "")+" of " + cfSel.getName()+"\n");
+		getStock();
 	}
 
 	public void saveIt(){
@@ -226,7 +227,7 @@ public class CoffeeMaker {
 			try{
 				System.out.print("\nNumber of cups:  - 1 or 2 ");
 				coffeeMaker.qSel = in.nextInt();
-				if(coffeeMaker.qSel < 2 && coffeeMaker.qSel > 0 ){
+				if(coffeeMaker.qSel <= 2 && coffeeMaker.qSel > 0 ){
 					System.out.print("Coffee type? \n'1' Espresso\n'2' Cappucino\n'3' Mocha\n'4' Latte ");
 					type = in.nextInt();
 					if (type < 5 && type > 0){
