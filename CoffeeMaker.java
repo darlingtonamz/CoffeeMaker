@@ -80,24 +80,24 @@ public class CoffeeMaker {
    		int usedChocolate = rVessel.getMaxVolume() - rVessel.getChocolateCurrentVolume();
    		int qMilk,qWater,qCoffee,qChocolate;
    		if(usedMilk > 0){
-			System.out.print("Load milk by: "+usedMilk + " units\nPlease input a value: ");
+			System.out.print("Load milk by at most: "+usedMilk + "-units\nPlease input a value: ");
 			qMilk = in_2.nextInt();
-			rVessel.setMilkCurrentVolume(rVessel.getMilkCurrentVolume() + qMilk);
+			rVessel.setMilkCurrentVolume(rVessel.getMilkCurrentVolume() + overflow(usedMilk, qMilk));
    		}
    		if(usedWater > 0){
-			System.out.print("Load water by: "+usedWater + " units\nPlease input a value: ");
+			System.out.print("Load water by at most: "+usedWater + "-units\nPlease input a value: ");
 			qWater = in_2.nextInt();
-			rVessel.setWaterCurrentVolume(rVessel.getWaterCurrentVolume() + qWater);
+			rVessel.setWaterCurrentVolume(rVessel.getWaterCurrentVolume() +  overflow(usedWater,qWater));
    		}
    		if(usedCoffee > 0){
-			System.out.print("Load coffee by: "+ usedCoffee + " units\nPlease input a value: ");
+			System.out.print("Load coffee by at most: "+ usedCoffee + "-units\nPlease input a value: ");
 			qCoffee = in_2.nextInt();
-			rVessel.setCoffeeCurrentVolume(rVessel.getCoffeeCurrentVolume() + qCoffee);
+			rVessel.setCoffeeCurrentVolume(rVessel.getCoffeeCurrentVolume() +  overflow(usedCoffee,qCoffee));
    		}
    		if(usedChocolate > 0){
-			System.out.print("Load chocolate by: "+usedChocolate + " units\nPlease input a value: ");
+			System.out.print("Load chocolate by at most: "+usedChocolate + "-units\nPlease input a value: ");
 			qChocolate = in_2.nextInt();
-			rVessel.setChocolateCurrentVolume(rVessel.getChocolateCurrentVolume() + qChocolate);
+			rVessel.setChocolateCurrentVolume(rVessel.getChocolateCurrentVolume() +  overflow(usedChocolate,qChocolate));
 		}
    		
    		saveIt();
@@ -105,8 +105,21 @@ public class CoffeeMaker {
    		if(coffeeIsSelected)
    			makeIt(qSel, selectedCoffee);
 
-  }
+	}
 
+	public int overflow(int max, int input){
+		if (input > max) {
+			System.out.println("\n******\nYou provided a quantity greater than what's needed\n"+
+					"The machine is taking "+max+"-units instead\n******\n");
+			return max;
+		} else if (input < 0) {
+			System.out.println("\n******\nNegative values are considered as ZERO-unit\n******\n");
+			return 0;
+		} else{
+			return input;
+		}
+	}
+	
 	private void makeIt(int q, Coffee cfSelected) {
 		if (isEnough(q, cfSelected)){
 			mix(q, cfSelected);
